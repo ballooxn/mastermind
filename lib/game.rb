@@ -26,13 +26,13 @@ class Game
     game_over = false
     until game_over
       Display.choose_your_guess
-      Player.choose_guess
+      choose_guess
       @board.push(@guess)
       feedback = make_feedback
       Display.display_feedback(feedback[0], feedback[1])
       Display.display_all_guesses(@board, @feedback_array)
 
-      if code_broken?
+      if feedback[0] == 4 # correct guesses
         winner = "Breaker"
         break
       end
@@ -41,11 +41,23 @@ class Game
     end_game(winner)
   end
 
-  def code_broken?
-    @guess.each_with_index do |_, index|
-      return false unless @guess[index] == @selected_code[index]
+  def choose_guess
+    choosing_guess = true
+    while choosing_guess
+      @guess = gets.chomp.downcase.split # this is an array
+      unless @guess.length == 4
+        puts "Error! Put in four selectable colors seperated by spaces"
+        next
+      end
+
+      count = 0
+      @guess.each do |i|
+        count += 1 if @@color_choices.include?(i)
+      end
+      break if count == 4
+
+      puts "Error! Put in four colors from this list: #{@@color_choices}"
     end
-    true
   end
 
   def end_game(winner)

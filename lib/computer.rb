@@ -8,4 +8,5 @@ module Computer
   end
 
   def choose_guess
+  end
 end
