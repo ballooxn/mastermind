@@ -17,6 +17,7 @@ class Game
     Display.intro(@@color_choices)
     Display.choose_your_guess
     choose_guess
+    @board.push(@guess)
     p @guess
   end
 
@@ -40,11 +41,21 @@ class Game
   end
 
   def make_feedback
-    @guess
-  end
+    correct = 0
+    is_correct = false
+    misplaced = 0
+    @guess.each_with_index do |color, index|
+      next unless @selected_code.include?(color)
 
-  def add_guess_to_board
-    array = @guess.split(" ")
-    @board.push
+      @selected_code.each_with_index do |_, i|
+        next unless @guess[index] == @selected_code[i]
+
+        correct += 1
+        is_correct = true
+        break
+      end
+      misplaced += 1 if is_correct == false
+      is_correct = false
+    end
   end
 end
