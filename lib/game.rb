@@ -88,13 +88,3 @@ class Game
     arr
   end
 end
-
-# @selected_code.each_with_index do |_, i|
-# next if i < index
-
-# puts "Selected index: #{i}"
-# next unless @guess[index] == @selected_code[i]
-
-# is_correct = true
-# break
-# end

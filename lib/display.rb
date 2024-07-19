@@ -8,6 +8,7 @@ module Display
     colors.each do |color|
       print "#{color}, "
     end
+    puts ""
   end
 
   def self.choose_your_guess
@@ -15,12 +16,13 @@ module Display
   end
 
   def self.display_all_guesses(board, feedback_array)
-    board.each do |i|
+    puts ""
+    board.each_with_index do |v, i|
       print "|"
-      i.each_with_index do |j, index|
-        print index == 3 ? j.to_s : "#{j}, "
+      v.each_with_index do |value, index|
+        print index == 3 ? value.to_s : "#{value}, "
       end
-      print "| #{feedback_array[0]} correct, #{feedback_array[1]} misplaced\n"
+      print "| #{feedback_array[i][0]} correct, #{feedback_array[i][1]} misplaced\n"
     end
   end
 
