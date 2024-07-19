@@ -16,8 +16,13 @@ class Game
     puts @selected_code
     Display.intro(@@color_choices)
     Display.choose_your_guess
-    cannot_continue = true
-    while cannot_continue
+    choose_guess
+    p @guess
+  end
+
+  def choose_guess
+    choosing_guess = true
+    while choosing_guess
       @guess = gets.chomp.downcase.split # this is an array
       unless @guess.length == 4
         puts "Error! Put in four selectable colors seperated by spaces"
@@ -28,11 +33,10 @@ class Game
       @guess.each do |i|
         count += 1 if @@color_choices.include?(i)
       end
-      cannot_continue = false if count == 4
+      break if count == 4
+
       puts "Error! Put in four colors from this list: #{@@color_choices}"
     end
-
-    p @guess
   end
 
   def make_feedback
