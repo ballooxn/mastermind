@@ -14,13 +14,22 @@ module Display
     puts "\nMake your guess!"
   end
 
-  def self.display_all_guesses(board)
-    board.length.times do |i|
-      puts board[i]
+  def self.display_all_guesses(board, feedback_array)
+    board.each do |i|
+      print "|"
+      i.each_with_index do |j, index|
+        print index == 3 ? j.to_s : "#{j}, "
+      end
+      print "| #{feedback_array[0]} correct, #{feedback_array[1]} misplaced\n"
     end
   end
 
   def self.display_feedback(correct, misplaced)
     puts "#{correct} correct, #{misplaced} misplaced."
+  end
+
+  def self.end_game_display(winner)
+    puts "#{winner} is the winner!"
+    puts "\nWould you like to play again? y/n"
   end
 end

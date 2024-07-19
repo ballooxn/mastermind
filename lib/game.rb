@@ -10,15 +10,46 @@ class Game
     @board = []
     @selected_code = Computer.choose_starting_code(@@color_choices)
     @guess = []
+    @feedback_array = []
   end
 
   def start_game
     puts @selected_code
     Display.intro(@@color_choices)
-    Display.choose_your_guess
-    choose_guess
-    @board.push(@guess)
-    p @guess
+    game_loop
+  end
+
+  def game_loop
+    winner = "Creator"
+    game_over = false
+    until game_over
+      Display.choose_your_guess
+      choose_guess
+      @board.push(@guess)
+      feedback = make_feedback
+      Display.display_feedback(feedback[0], feedback[1])
+      Display.display_all_guesses(@board, @feedback_array)
+
+      if code_broken?
+        winner = "Breaker"
+        break
+      end
+      break if @board.length > 3
+    end
+    end_game(winner)
+  end
+
+  def code_broken?
+    @guess.each_with_index do |_, index|
+      return false unless @guess[index] == @selected_code[index]
+    end
+    true
+  end
+
+  def end_game(winner)
+    Display.end_game_display(winner)
+    play_again = gets.chomp.downcase
+    Game.new.start_game if play_again == "y"
   end
 
   def choose_guess
@@ -42,20 +73,28 @@ class Game
 
   def make_feedback
     correct = 0
-    is_correct = false
     misplaced = 0
     @guess.each_with_index do |color, index|
       next unless @selected_code.include?(color)
 
-      @selected_code.each_with_index do |_, i|
-        next unless @guess[index] == @selected_code[i]
-
+      if @guess[index] == @selected_code[index]
         correct += 1
-        is_correct = true
-        break
+        next
       end
-      misplaced += 1 if is_correct == false
-      is_correct = false
+      misplaced += 1
     end
+    arr = [correct, misplaced]
+    @feedback_array.push(arr) # This array is used for the display_board method in Display
+    arr
   end
 end
+
+# @selected_code.each_with_index do |_, i|
+# next if i < index
+
+# puts "Selected index: #{i}"
+# next unless @guess[index] == @selected_code[i]
+
+# is_correct = true
+# break
+# end
