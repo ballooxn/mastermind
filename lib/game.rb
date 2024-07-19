@@ -30,12 +30,13 @@ class Game
 
   def creator_game_loop
     puts "Create a code of 4 colors seperated by spaces."
+    create_code
   end
 
   def create_code
     while true
-      @selected_code = gets.chomp.downcase.join(" ")
-      unless @guess.length == 4
+      @selected_code = gets.chomp.downcase.split(" ")
+      unless @selected_code.length == 4
         puts "Error! Put in four selectable colors seperated by spaces"
         next
       end
