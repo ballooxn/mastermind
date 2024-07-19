@@ -1,9 +1,11 @@
 require_relative "display"
 require_relative "computer"
+require_relative "player"
 
 class Game
   include Computer
   include Display
+  include Player
 
   @@color_choices = %w[red blue yellow green pink purple orange]
   def initialize
@@ -16,15 +18,15 @@ class Game
   def start_game
     puts @selected_code
     Display.intro(@@color_choices)
-    game_loop
+    breaker_game_loop
   end
 
-  def game_loop
+  def breaker_game_loop
     winner = "Creator"
     game_over = false
     until game_over
       Display.choose_your_guess
-      choose_guess
+      Player.choose_guess
       @board.push(@guess)
       feedback = make_feedback
       Display.display_feedback(feedback[0], feedback[1])
@@ -50,25 +52,6 @@ class Game
     Display.end_game_display(winner)
     play_again = gets.chomp.downcase
     Game.new.start_game if play_again == "y"
-  end
-
-  def choose_guess
-    choosing_guess = true
-    while choosing_guess
-      @guess = gets.chomp.downcase.split # this is an array
-      unless @guess.length == 4
-        puts "Error! Put in four selectable colors seperated by spaces"
-        next
-      end
-
-      count = 0
-      @guess.each do |i|
-        count += 1 if @@color_choices.include?(i)
-      end
-      break if count == 4
-
-      puts "Error! Put in four colors from this list: #{@@color_choices}"
-    end
   end
 
   def make_feedback

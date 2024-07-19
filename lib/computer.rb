@@ -6,4 +6,6 @@ module Computer
     end
     selected_code
   end
+
+  def choose_guess
 end
