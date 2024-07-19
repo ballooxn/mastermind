@@ -10,18 +10,45 @@ class Game
   @@color_choices = %w[red blue yellow green pink purple orange]
   def initialize
     @board = []
-    @selected_code = Computer.choose_starting_code(@@color_choices)
+    @selected_code = []
     @guess = []
     @feedback_array = []
   end
 
   def start_game
-    puts @selected_code
     Display.intro(@@color_choices)
-    breaker_game_loop
+    puts "\nWould you like to play as the Breaker or the Creator? b/c"
+    answer = gets.chomp.downcase
+    if answer == "b"
+      breaker_game_loop
+    elsif answer == "c"
+      creator_game_loop
+    else
+      puts "ERROR!"
+    end
+  end
+
+  def creator_game_loop
+    puts "Create a code of 4 colors seperated by spaces."
+  end
+
+  def create_code
+    while true
+      @selected_code = gets.chomp.downcase.join(" ")
+      unless @guess.length == 4
+        puts "Error! Put in four selectable colors seperated by spaces"
+        next
+      end
+
+      break if valid?(@selected_code)
+
+      puts "Error! Put in four selectable colors seperated by spaces"
+    end
   end
 
   def breaker_game_loop
+    @selected_code = Computer.choose_starting_code(@@color_choices)
+    puts @selected_code
     winner = "Creator"
     game_over = false
     until game_over
@@ -41,6 +68,17 @@ class Game
     end_game(winner)
   end
 
+  # Checks if the code is valid, returns true if it is.
+  def valid?(array)
+    count = 0
+    array.each do |i|
+      count += 1 if @@color_choices.include?(i)
+    end
+    return true if count == 4
+
+    false
+  end
+
   def choose_guess
     choosing_guess = true
     while choosing_guess
@@ -50,11 +88,7 @@ class Game
         next
       end
 
-      count = 0
-      @guess.each do |i|
-        count += 1 if @@color_choices.include?(i)
-      end
-      break if count == 4
+      break if is_valid?(@guess)
 
       puts "Error! Put in four colors from this list: #{@@color_choices}"
     end
