@@ -1,7 +1,7 @@
 require_relative "display"
 require_relative "computer"
 require_relative "player"
-COLOR_CHOICES = %w[red blue yellow green pink purple orange]
+COLOR_CHOICES = %w[red blue yellow green purple orange].freeze
 
 class Game
   include Computer
@@ -59,8 +59,8 @@ class Game
   end
 
   def create_code
-    while true
-      @selected_code = gets.chomp.downcase.split(" ")
+    loop do
+      @selected_code = gets.chomp.downcase.split
       unless @selected_code.length == 4
         puts "Error! Put in four selectable colors seperated by spaces"
         next
