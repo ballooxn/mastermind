@@ -1,13 +1,13 @@
 require_relative "display"
 require_relative "computer"
 require_relative "player"
+COLOR_CHOICES = %w[red blue yellow green pink purple orange]
 
 class Game
   include Computer
   include Display
   include Player
 
-  @@color_choices = %w[red blue yellow green pink purple orange]
   def initialize
     @board = []
     @selected_code = []
@@ -19,7 +19,7 @@ class Game
   end
 
   def start_game
-    Display.intro(@@color_choices)
+    Display.intro(COLOR_CHOICES)
     puts "\nWould you like to play as the Breaker or the Creator? b/c"
     answer = gets.chomp.downcase
     if answer == "b"
@@ -41,7 +41,7 @@ class Game
       Display.computer_choosing_guess
       sleep(1)
       feedback = []
-      @guess = Computer.choose_guess(@board, @@color_choices, @correct_array)
+      @guess = Computer.choose_guess(@board, COLOR_CHOICES, @correct_array)
       @board.push(@guess)
       feedback = make_feedback
       puts "Computer chose... #{@guess}"
@@ -73,8 +73,7 @@ class Game
   end
 
   def breaker_game_loop
-    @selected_code = Computer.choose_starting_code(@@color_choices)
-    puts @selected_code
+    @selected_code = Computer.choose_starting_code(COLOR_CHOICES)
 
     game_over = false
     until game_over
@@ -98,7 +97,7 @@ class Game
   def valid?(array)
     count = 0
     array.each do |i|
-      count += 1 if @@color_choices.include?(i)
+      count += 1 if COLOR_CHOICES.include?(i)
     end
     return true if count == 4
 
@@ -114,9 +113,9 @@ class Game
         next
       end
 
-      break if is_valid?(@guess)
+      break if valid?(@guess)
 
-      puts "Error! Put in four colors from this list: #{@@color_choices}"
+      puts "Error! Put in four colors from this list: #{COLOR_CHOICES}"
     end
   end
 

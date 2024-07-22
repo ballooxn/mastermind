@@ -16,7 +16,6 @@ module Computer
       end
     else
       4.times do |index|
-        p "First: #{board[-1][index]}, second: #{correct_array[index]}"
         if board[-1][index] == correct_array[index]
           guess[index] = correct_array[index]
         else
