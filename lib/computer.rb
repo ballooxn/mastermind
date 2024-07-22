@@ -7,6 +7,23 @@ module Computer
     selected_code
   end
 
-  def choose_guess
+  def self.choose_guess(board, color_choices, correct_array)
+    guess = []
+    if board.empty?
+      # first guess of the game, no feedback to go over.
+      4.times do
+        guess.push(color_choices.sample)
+      end
+    else
+      4.times do |index|
+        p "First: #{board[-1][index]}, second: #{correct_array[index]}"
+        if board[-1][index] == correct_array[index]
+          guess[index] = correct_array[index]
+        else
+          guess.push(color_choices.sample)
+        end
+      end
+    end
+    guess
   end
 end

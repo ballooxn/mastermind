@@ -13,6 +13,9 @@ class Game
     @selected_code = []
     @guess = []
     @feedback_array = []
+    @computer_breaking = false
+    @winner = "Creator"
+    @correct_array = []
   end
 
   def start_game
@@ -31,6 +34,28 @@ class Game
   def creator_game_loop
     puts "Create a code of 4 colors seperated by spaces."
     create_code
+    game_over = false
+    @computer_breaking = true
+
+    until game_over
+      Display.computer_choosing_guess
+      sleep(1)
+      feedback = []
+      @guess = Computer.choose_guess(@board, @@color_choices, @correct_array)
+      @board.push(@guess)
+      feedback = make_feedback
+      puts "Computer chose... #{@guess}"
+      Display.display_feedback(feedback[0], feedback[1])
+      sleep(2)
+      Display.display_all_guesses(@board, @feedback_array)
+
+      if feedback[0] == 4 # correct guesses
+        @winner = "Breaker"
+        break
+      end
+      break if @board.length >= 12
+    end
+    end_game
   end
 
   def create_code
@@ -50,7 +75,7 @@ class Game
   def breaker_game_loop
     @selected_code = Computer.choose_starting_code(@@color_choices)
     puts @selected_code
-    winner = "Creator"
+
     game_over = false
     until game_over
       Display.choose_your_guess
@@ -61,12 +86,12 @@ class Game
       Display.display_all_guesses(@board, @feedback_array)
 
       if feedback[0] == 4 # correct guesses
-        winner = "Breaker"
+        @winner = "Breaker"
         break
       end
-      break if @board.length > 3
+      break if @board.length >= 12
     end
-    end_game(winner)
+    end_game
   end
 
   # Checks if the code is valid, returns true if it is.
@@ -95,8 +120,8 @@ class Game
     end
   end
 
-  def end_game(winner)
-    Display.end_game_display(winner)
+  def end_game
+    Display.end_game_display(@winner)
     play_again = gets.chomp.downcase
     Game.new.start_game if play_again == "y"
   end
@@ -108,13 +133,16 @@ class Game
       next unless @selected_code.include?(color)
 
       if @guess[index] == @selected_code[index]
+        @correct_array[index] = color if @computer_breaking
         correct += 1
         next
       end
+      @correct_array[index] = "_" if @computer_breaking
       misplaced += 1
     end
     arr = [correct, misplaced]
     @feedback_array.push(arr) # This array is used for the display_board method in Display
+
     arr
   end
 end

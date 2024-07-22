@@ -34,4 +34,8 @@ module Display
     puts "#{winner} is the winner!"
     puts "\nWould you like to play again? y/n"
   end
+
+  def self.computer_choosing_guess
+    puts "The computer is choosing it's guess..."
+  end
 end
