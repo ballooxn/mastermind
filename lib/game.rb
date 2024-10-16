@@ -8,7 +8,7 @@ class Game
   include Player
 
   COLOR_CHOICES = %w[red orange yellow green blue pink purple].freeze
-  MAX_NUMBER_OF_GUESSES = 2
+  MAX_NUMBER_OF_GUESSES = 12
 
   def initialize
     @computer_score = 0
@@ -50,7 +50,7 @@ class Game
     until @winner || @guesses >= MAX_NUMBER_OF_GUESSES
 
       guess = nil
-      guess = obtain_guess.split until valid_guess_or_code?(guess)
+      guess = obtain_guess until valid_guess_or_code?(guess)
 
       # Feedback = {correct: 0, misplaced: 0}
       feedback = evaluate_guess(guess)

@@ -5,11 +5,11 @@ module Player
 
   def self.choose_code
     Display.choose_code
-    gets.chomp.downcase
+    gets.chomp.downcase.split
   end
 
   def self.choose_guess
     Display.choose_guess
-    gets.chomp.downcase
+    gets.chomp.downcase.split
   end
 end

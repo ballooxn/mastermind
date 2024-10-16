@@ -11,5 +11,11 @@ module Computer
   end
 
   def self.choose_guess
+    guess = []
+    4.times do |_|
+      rand_color = Computer::COLOR_CHOICES[rand(0..6)]
+      guess.push(rand_color)
+    end
+    guess
   end
 end
